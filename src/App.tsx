@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import './App.css'
 
+import { getCards } from './services/cardService'
 import CardView from './components/CardView'
 
 const AppContainer = styled.div`
@@ -28,9 +29,8 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await fetch(`https://carpal-cliff-dianella.glitch.me/api/card`)
-      const json = await data.json()
-      console.log('json data: ', json)
+      const json = await getCards()
+      // console.log('json data: ', json)
       setCards(json)
     }
     fetchData()

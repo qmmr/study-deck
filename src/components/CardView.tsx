@@ -24,13 +24,17 @@ const ButtonsContainer = styled.div`
 export type TViewProps = TCard & { onRemove: (id: string) => void }
 
 export const CardView: FunctionComponent<TViewProps> = ({ id, term, definition, onRemove }) => {
-  const handleRemove = (event: MouseEvent<HTMLButtonElement>): void => {
+  const handleRemove = async (event: MouseEvent<HTMLButtonElement>): Promise<void> => {
     event.preventDefault()
     const confirm: boolean = window.confirm(`Do you want to remove "${term}"?`)
 
     if (confirm) {
-      onRemove(id) // Remove from App state
-      removeCard(id) // Remove from DB via API call
+      try {
+        await removeCard(id) // Wait until the card is removed from the DB via API call
+        onRemove(id) // ... and then remove it from the App state
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 

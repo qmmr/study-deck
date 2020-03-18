@@ -36,6 +36,10 @@ function App() {
     fetchData()
   }, [])
 
+  const handleCardRemove = (id: string): void => {
+    setCards(cards.filter((card: TCard): boolean => card.id !== id))
+  }
+
   return (
     <AppContainer>
       <header>
@@ -48,7 +52,7 @@ function App() {
         <h1>Main</h1>
         <CardsContainer>
           {cards.map((card: TCard) => (
-            <CardView key={card.id} {...card} />
+            <CardView key={card.id} onRemove={handleCardRemove} {...card} />
           ))}
         </CardsContainer>
       </main>

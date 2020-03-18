@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, MouseEvent } from 'react'
 import styled from 'styled-components'
 import { TCard } from '../App'
+import { removeCard } from '../services/cardService'
 
 const View = styled.div`
   display: flex;
@@ -20,9 +21,19 @@ const ButtonsContainer = styled.div`
   margin-top: auto;
 `
 
-export type TViewProps = TCard
+export type TViewProps = TCard & { onRemove: (id: string) => void }
 
-export const CardView: FunctionComponent<TViewProps> = ({ term, definition }) => {
+export const CardView: FunctionComponent<TViewProps> = ({ id, term, definition, onRemove }) => {
+  const handleRemove = (event: MouseEvent<HTMLButtonElement>): void => {
+    event.preventDefault()
+    const confirm: boolean = window.confirm(`Do you want to remove "${term}"?`)
+
+    if (confirm) {
+      onRemove(id) // Remove from App state
+      removeCard(id) // Remove from DB via API call
+    }
+  }
+
   return (
     <View>
       <p>Term: {term}</p>
@@ -31,7 +42,7 @@ export const CardView: FunctionComponent<TViewProps> = ({ term, definition }) =>
         <button type="button">Show</button>
         <div>
           <button>Edit</button>
-          <button>Remove</button>
+          <button onClick={handleRemove}>Remove</button>
         </div>
       </ButtonsContainer>
     </View>

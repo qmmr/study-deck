@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### Server is running on [Glitch](https://glitch.com/edit/#!/carpal-cliff-dianella?path=data/db.json:1:0)
+
 ## Available Scripts
 
 In the project directory, you can run:

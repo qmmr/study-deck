@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex } from 'rebass'
+import { Flex, Text } from 'rebass'
 import './App.css'
 
 import { ThemeProvider } from 'emotion-theming'
@@ -15,6 +15,7 @@ export const preset = {
     background: '#fff',
     primary: '#07c',
     secondary: '#30c',
+    danger: '#f0f',
     muted: '#f6f6f9',
     gray: '#dddddf',
     highlight: 'hsla(205, 100%, 40%, 0.125)',
@@ -108,6 +109,10 @@ export const preset = {
       color: 'background',
       bg: 'secondary',
     },
+    danger: {
+      color: 'white',
+      bg: 'danger',
+    },
   },
   styles: {
     root: {
@@ -150,9 +155,9 @@ function App() {
     <ThemeProvider theme={preset}>
       <Flex flexDirection="column">
         <header>
-          <h1>
+          <Text as="h1">
             Study<span>Deck</span>
-          </h1>
+          </Text>
           <h2>Study, sleep, repeat...</h2>
         </header>
         <main>

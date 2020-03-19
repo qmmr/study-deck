@@ -4,8 +4,9 @@ import { Label, Textarea } from '@rebass/forms'
 import { saveCard } from '../services/cardService'
 import { TCard } from '../App'
 
-type TCardFormProps = { onSave: (card: TCard) => void }
-const CardForm: FunctionComponent<TCardFormProps> = props => {
+type TCardFormProps = { onSave?: (card: TCard) => void; onCancel?: () => void }
+
+const CardForm: FunctionComponent<TCardFormProps> = ({ onSave = () => {}, onCancel = () => {} }) => {
   const [term, setTerm] = useState('')
   const [definition, setDefinition] = useState('')
 
@@ -21,7 +22,7 @@ const CardForm: FunctionComponent<TCardFormProps> = props => {
     event.preventDefault()
     try {
       const card: TCard = await saveCard({ term, definition })
-      props.onSave && typeof props.onSave === 'function' && props.onSave(card)
+      onSave(card)
       handleReset()
     } catch (err) {
       throw err
@@ -31,11 +32,11 @@ const CardForm: FunctionComponent<TCardFormProps> = props => {
   const handleReset = (): void => {
     setTerm('')
     setDefinition('')
+    onCancel()
   }
 
   return (
     <Box as="form" onSubmit={handleSubmit} onReset={handleReset}>
-      CardForm
       <Label htmlFor="term">Term</Label>
       <Textarea id="term" name="term" value={term} onChange={handleTermChange} placeholder="Enter your term" />
       <Label htmlFor="definition">Term</Label>

@@ -1,9 +1,11 @@
-import React, { FunctionComponent, MouseEvent } from 'react'
+import React, { FunctionComponent, MouseEvent, useState } from 'react'
 import styled from 'styled-components'
+import { Button, Text } from 'rebass'
 import { TCard } from '../App'
 import { removeCard } from '../services/cardService'
+import CardForm from './CardForm'
 
-const View = styled.div`
+const ViewContainer = styled.div`
   display: flex;
   flex-flow: column nowrap;
   height: 300px;
@@ -21,9 +23,33 @@ const ButtonsContainer = styled.div`
   margin-top: auto;
 `
 
-export type TViewProps = TCard & { onRemove: (id: string) => void }
+type TCardViewProps = TCard & { onRemove: (id: string) => void }
+type TViewProps = TCardViewProps & { onEdit: () => void }
 
-export const CardView: FunctionComponent<TViewProps> = ({ id, term, definition, onRemove }) => {
+export const CardView: FunctionComponent<TCardViewProps> = ({ onRemove, ...card }) => {
+  const [isEditMode, setIsEditMode] = useState(false)
+  const handleToggleEdit = (): void => {
+    setIsEditMode(current => !current)
+  }
+  // TODO: Use update when available in cardService...
+  const handleSave = (): void => {}
+
+  return isEditMode ? (
+    <ViewContainer>
+      <CardForm onSave={handleSave} onCancel={handleToggleEdit} />
+    </ViewContainer>
+  ) : (
+    <View {...card} onRemove={onRemove} onEdit={handleToggleEdit} />
+  )
+}
+
+const View: FunctionComponent<TViewProps> = ({ id, term, definition, onRemove, onEdit }) => {
+  const [isFront, setIsFront] = useState(true)
+  const handleShow = (event: MouseEvent<HTMLButtonElement>): void => {
+    event.preventDefault()
+    setIsFront(current => !current)
+  }
+
   const handleRemove = async (event: MouseEvent<HTMLButtonElement>): Promise<void> => {
     event.preventDefault()
     const confirm: boolean = window.confirm(`Do you want to remove "${term}"?`)
@@ -39,17 +65,23 @@ export const CardView: FunctionComponent<TViewProps> = ({ id, term, definition, 
   }
 
   return (
-    <View>
-      <p>Term: {term}</p>
-      <p>Definition: {definition}</p>
+    <ViewContainer>
+      <Text>{isFront ? 'Front' : 'Back'}</Text>
+      <Text>{isFront ? `Term: ${term}` : `Definition: ${definition}`}</Text>
       <ButtonsContainer>
-        <button type="button">Show</button>
+        <Button variant="secondary" type="button" onClick={handleShow}>
+          Show {isFront ? 'back' : 'front'}
+        </Button>
         <div>
-          <button>Edit</button>
-          <button onClick={handleRemove}>Remove</button>
+          <Button variant="outline" onClick={onEdit}>
+            Edit
+          </Button>
+          <Button variant="danger" onClick={handleRemove}>
+            Remove
+          </Button>
         </div>
       </ButtonsContainer>
-    </View>
+    </ViewContainer>
   )
 }
 

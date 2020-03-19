@@ -14,6 +14,7 @@
     "@types/rebass": "4.0.4",
     "@types/rebass__forms": "4.0.1",
     "@types/styled-components": "5.0.1",
+    "emotion-theming": "10.0.27",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",

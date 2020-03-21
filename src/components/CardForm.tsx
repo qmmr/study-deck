@@ -15,7 +15,7 @@ const CardForm: FunctionComponent<TCardFormProps> = ({
   onCancel = () => {},
   card = { id: undefined, term: '', definition: '' },
 }) => {
-  const isSaved: boolean = !!card && 'id' in card
+  const isSaved: boolean = !!card && 'id' in card && card.id !== undefined
   const [term, setTerm] = useState(isSaved ? card.term : '')
   const [definition, setDefinition] = useState(isSaved ? card.definition : '')
 

@@ -24,22 +24,20 @@ async function createCard<T>(card: TUnsavedCard): Promise<T> {
     body: JSON.stringify(card),
   })
 
-  return response.json()
+  return await response.json()
 }
 
 // TODO: Convert to arrow function syntax
 async function updateCard<T>(card: TCard): Promise<T> {
-  console.log('updateCard:: ', card)
   const response = await fetch(`/api/card/${card.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(card),
   })
 
-  return response.json()
+  return await response.json()
 }
 
 export async function saveCard<T>(card: TGenericCard): Promise<T> {
-  console.log('saveCard:: ', card)
-  return 'id' in card ? updateCard(card) : createCard(card)
+  return 'id' in card && card.id !== undefined ? updateCard(card) : createCard(card)
 }

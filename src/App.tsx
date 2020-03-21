@@ -6,8 +6,7 @@ import { ThemeProvider } from 'emotion-theming'
 
 import { theme } from './theme'
 import { getCards } from './services/cardService'
-import CardView from './components/CardView'
-import CardForm from './components/CardForm'
+import CardList from './components/CardList'
 
 export type TCard = {
   id: string
@@ -51,13 +50,7 @@ function App() {
           <h2>Study, sleep, repeat...</h2>
         </header>
         <main>
-          <h1>Main</h1>
-          <CardForm onSave={handleCardAdd} />
-          <Flex flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
-            {cards.map((card: TCard) => (
-              <CardView key={card.id} onRemove={handleCardRemove} onUpdate={handleUpdate} {...card} />
-            ))}
-          </Flex>
+          <CardList cards={cards} onAdd={handleCardAdd} onRemove={handleCardRemove} onUpdate={handleUpdate} />
         </main>
       </Flex>
     </ThemeProvider>

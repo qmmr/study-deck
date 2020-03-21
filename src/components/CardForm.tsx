@@ -47,11 +47,17 @@ const CardForm: FunctionComponent<TCardFormProps> = ({
   return (
     <Box as="form" onSubmit={handleSubmit} onReset={handleReset}>
       <Text as="h4">{isSaved ? 'Update card' : 'Add card'}</Text>
-      <Label htmlFor="term">Term</Label>
-      <Textarea id="term" name="term" value={term} onChange={handleTermChange} placeholder="Enter your term" />
-      <Label htmlFor="definition">Term</Label>
+      <Label htmlFor={isSaved ? `term_${card.id}` : 'new'}>Term</Label>
       <Textarea
-        id="definition"
+        id={isSaved ? `term_${card.id}` : 'new'}
+        name="term"
+        value={term}
+        onChange={handleTermChange}
+        placeholder="Enter your term"
+      />
+      <Label htmlFor={isSaved ? `definition_${card.id}` : 'new'}>Definition</Label>
+      <Textarea
+        id={isSaved ? `definition_${card.id}` : 'new'}
         name="definition"
         onChange={handleDefinitionChange}
         placeholder="Enter your definition"

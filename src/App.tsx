@@ -37,6 +37,10 @@ function App() {
     setCards(existingCards => [...existingCards, card])
   }
 
+  const handleUpdate = (card: TCard): void => {
+    setCards(existingCards => existingCards.map(c => (c.id === card.id ? card : c)))
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Flex flexDirection="column">
@@ -51,7 +55,7 @@ function App() {
           <CardForm onSave={handleCardAdd} />
           <Flex flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
             {cards.map((card: TCard) => (
-              <CardView key={card.id} onRemove={handleCardRemove} {...card} />
+              <CardView key={card.id} onRemove={handleCardRemove} onUpdate={handleUpdate} {...card} />
             ))}
           </Flex>
         </main>

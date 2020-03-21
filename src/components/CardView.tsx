@@ -1,43 +1,39 @@
 import React, { FunctionComponent, MouseEvent, useState } from 'react'
-import styled from 'styled-components'
-import { Button, Text } from 'rebass'
+import { Button, Flex, Text } from 'rebass'
 import { TCard } from '../App'
 import { removeCard } from '../services/cardService'
 import CardForm from './CardForm'
 
-const ViewContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  height: 300px;
-  width: 300px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  padding: 1rem;
-`
+type TCardViewProps = TCard & {
+  onRemove: (id: string) => void
+  onUpdate: (card: TCard) => void
+}
+type TViewProps = TCard & { onEdit: () => void; onRemove: (id: string) => void }
+type TViewContainerProps = { children: React.ReactNode }
 
-const ButtonsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: auto;
-`
-
-type TCardViewProps = TCard & { onRemove: (id: string) => void }
-type TViewProps = TCardViewProps & { onEdit: () => void }
-
-export const CardView: FunctionComponent<TCardViewProps> = ({ onRemove, ...card }) => {
+export const CardContainer: FunctionComponent<TViewContainerProps> = ({ children }) => {
+  return (
+    <Flex
+      flexDirection="column"
+      flexWrap="nowrap"
+      size={[300, 300]}
+      p={3}
+      sx={{ border: '1px solid #636363', borderRadius: '5px', boxShadow: '3px 3px 8px rgba(0,0,0,0.3)' }}
+    >
+      {children}
+    </Flex>
+  )
+}
+export const CardView: FunctionComponent<TCardViewProps> = ({ onRemove, onUpdate, ...card }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const handleToggleEdit = (): void => {
     setIsEditMode(current => !current)
   }
-  // TODO: Use update when available in cardService...
-  const handleSave = (): void => {}
 
   return isEditMode ? (
-    <ViewContainer>
-      <CardForm onSave={handleSave} onCancel={handleToggleEdit} />
-    </ViewContainer>
+    <CardContainer>
+      <CardForm onSave={onUpdate} onCancel={handleToggleEdit} card={card} />
+    </CardContainer>
   ) : (
     <View {...card} onRemove={onRemove} onEdit={handleToggleEdit} />
   )
@@ -65,23 +61,34 @@ const View: FunctionComponent<TViewProps> = ({ id, term, definition, onRemove, o
   }
 
   return (
-    <ViewContainer>
-      <Text>{isFront ? 'Front' : 'Back'}</Text>
-      <Text>{isFront ? `Term: ${term}` : `Definition: ${definition}`}</Text>
-      <ButtonsContainer>
-        <Button variant="secondary" type="button" onClick={handleShow}>
+    <CardContainer>
+      <Text as="h2" color="text" mt="1" fontSize={3}>
+        {isFront ? `Term` : `Definition`}
+      </Text>
+      <Text as="h1" color="heading" mt="2" fontSize={4}>
+        {isFront ? term : definition}
+      </Text>
+      <Flex flexDirection="row" justifyContent="space-between" mt="auto">
+        <Button
+          variant="secondary"
+          type="button"
+          onClick={handleShow}
+          width={[100]}
+          fontSize={0}
+          sx={{ cursor: 'pointer' }}
+        >
           Show {isFront ? 'back' : 'front'}
         </Button>
-        <div>
-          <Button variant="outline" onClick={onEdit}>
+        <Flex>
+          <Button variant="outline" onClick={onEdit} fontSize={1} sx={{ cursor: 'pointer' }}>
             Edit
           </Button>
-          <Button variant="danger" onClick={handleRemove}>
+          <Button variant="danger" onClick={handleRemove} fontSize={1} ml={1} sx={{ cursor: 'pointer' }}>
             Remove
           </Button>
-        </div>
-      </ButtonsContainer>
-    </ViewContainer>
+        </Flex>
+      </Flex>
+    </CardContainer>
   )
 }
 

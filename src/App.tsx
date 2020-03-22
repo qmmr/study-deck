@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Flex, Text } from 'rebass'
-import './App.css'
-
 import { ThemeProvider } from 'emotion-theming'
+import { Router } from '@reach/router'
 
 import { theme } from './theme'
 import { getCards } from './services/cardService'
 import CardList from './components/CardList'
+import Practice from './components/Practice'
 
 export type TCard = {
   id: string
@@ -50,7 +50,16 @@ function App() {
           <h2>Study, sleep, repeat...</h2>
         </header>
         <main>
-          <CardList cards={cards} onAdd={handleCardAdd} onRemove={handleCardRemove} onUpdate={handleUpdate} />
+          <Router>
+            <CardList
+              path="/"
+              cards={cards}
+              onAdd={handleCardAdd}
+              onRemove={handleCardRemove}
+              onUpdate={handleUpdate}
+            />
+            <Practice path="practice" />
+          </Router>
         </main>
       </Flex>
     </ThemeProvider>

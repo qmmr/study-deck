@@ -28,6 +28,7 @@ const CardForm: FunctionComponent<TCardFormProps> = ({
   }
 
   const handleSubmit = async (event: FormEvent): Promise<void> => {
+    console.log('handleSubmit :: ', card, term, definition)
     event.preventDefault()
     try {
       const savedCard: TCard = await saveCard({ id: card.id, term, definition })

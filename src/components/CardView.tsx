@@ -17,6 +17,8 @@ export const CardContainer: FunctionComponent<TViewContainerProps> = ({ children
       flexDirection="column"
       flexWrap="nowrap"
       size={[300, 300]}
+      mr={2}
+      mb={2}
       p={3}
       sx={{ border: '1px solid #636363', borderRadius: '5px', boxShadow: '3px 3px 8px rgba(0,0,0,0.3)' }}
     >

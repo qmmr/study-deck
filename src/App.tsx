@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Text } from 'rebass'
+import { Box, Flex, Text } from 'rebass'
 import { ThemeProvider } from 'emotion-theming'
-import { Router } from '@reach/router'
+import { Link, Router, RouteComponentProps } from '@reach/router'
 
 import { theme } from './theme'
 import { getCards } from './services/cardService'
@@ -15,6 +15,16 @@ export type TCard = {
 }
 
 export type TCards = Array<TCard>
+
+type TLinkAsButtonProps = RouteComponentProps & { children: React.ReactNode; to: string }
+
+function LinkAsButton({ children, to }: TLinkAsButtonProps) {
+  return (
+    <Link style={{ textDecoration: 'none' }} to={to}>
+      {children}
+    </Link>
+  )
+}
 
 function App() {
   const [cards, setCards] = useState<TCards>([])
@@ -42,14 +52,24 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Flex flexDirection="column">
-        <header>
+      <Flex flexDirection="column" width={[1, 1 / 2, 1 / 2, 2 / 3]} mx="auto" mt={1}>
+        <Flex as="header" flexDirection="column">
           <Text as="h1">
             Study<span>Deck</span>
           </Text>
           <h2>Study, sleep, repeat...</h2>
-        </header>
-        <main>
+          <Box as="nav" my={3}>
+            <Flex as="ul" flexDirection="row" sx={{ listStyle: 'none' }}>
+              <Box as="li" mr={2}>
+                <LinkAsButton to="/">home</LinkAsButton>
+              </Box>
+              <Box as="li">
+                <LinkAsButton to="practice">practice deck</LinkAsButton>
+              </Box>
+            </Flex>
+          </Box>
+        </Flex>
+        <Flex as="main">
           <Router>
             <CardList
               path="/"
@@ -58,9 +78,9 @@ function App() {
               onRemove={handleCardRemove}
               onUpdate={handleUpdate}
             />
-            <Practice path="practice" />
+            <Practice path="practice" cards={cards} />
           </Router>
-        </main>
+        </Flex>
       </Flex>
     </ThemeProvider>
   )
